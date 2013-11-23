@@ -10,6 +10,11 @@ Until now it works for the most recent episodes, other episodes throw a 404 erro
 
 run the script
 --------------
+you will need the python package mechanize
+
+    sudo apt-get install python-mechanize
+    
+then run the script with
 
     python grabLinks.py [options]
 
