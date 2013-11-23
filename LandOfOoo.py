@@ -10,6 +10,12 @@ import lxml.html, urllib2, urlparse, os, re, sys, time
 from mechanize import Browser
 from Daemon import Daemon
 
+
+"""
+core of the adventureStream
+fetches & saves a list of links with all episodes
+can play episodes
+"""
 class Enchiridion:
 
     def __init__(self, base_url):
@@ -112,30 +118,54 @@ episode and will then ask you to watch it
 """
 class AdventureDaemon(Daemon):
     
-    def __init__(self,enchiridion, checkIntervalMin = 30):
+
+    def __init__(self,enchiridion, checkIntervalMin = 0.5):
+        super(AdventureDaemon, self).__init__('/tmp/adventureDaemon.pid')
+
         self.enchiridion = enchiridion
         self.checkInterval = checkIntervalMin
-        super(AdventureDaemon, self).__init__('/tmp/adventureDaemon.pid')
+
+        self.tmpFileName = ".tmpFile.ats"
+        # if daemon is executed first time, create an initial tmpFile
+        if not os.path.isfile(self.tmpFileName):
+            self.writeTmpFile()
+
+
+    def writeTmpFile(self):
+        tmpFile = open(self.tmpFileName, "wr")
+        tmpFile.write(str(enchiridion.nEpisodes))
+        tmpFile.close()
+
+
+    def readTmpFile(self):
+        try:
+            tmpFile = open(self.tmpFileName, "r")
+        except:
+            # TODO make this write to an error log file
+            sys.stderr.write("couldn't find tmp file")
+        n = int(tmpFile.read())
+        tmpFile.close()
+        return n
+        
+
 
     """
     overwritten method of the motherclass Daemon
     """
-    # TODO make this log to a file
-    # TODO untested, no clue if it realy does something when a new episode is out
-    # TODO save nEpisodes into textfile
     def run(self):
         while True:
-            oldNumber = self.enchiridion.nEpisodes
+            oldNumber = self.readTmpFile()
             enchiridion.updateLinks()
+            self.writeTmpFile()
 
             # wanna watch?
-            if oldNumber < self.enchiridion.nEpisodes:
+            if oldNumber < self.readTmpFile():
                 print "WHAT TIME IS IT? ADVENTURE TIME!!!!"
-                input("new episode bro! wanna watch? 1 = yes", yn)
+                yn = input("new episode bro! wanna watch? 1 = yes: ")
                 if yn == 1:
                     enchiridion.playEpisode(1)
                 else:
-                    print "ahhhh, you're lame man! I'm gonna watch with BMO..."
+                    print "ahhhh, you're lame man! I'm gonna watch it with BMO..."
             else:
                 "naaah man, nothin new..."
 
@@ -159,18 +189,21 @@ if __name__ == "__main__":
     # play latest episode
     if sys.argv[-1] == '-l':
         enchiridion.playEpisode(1)
+
     # start daemon watcher
     elif sys.argv[-1] == '-w':
         print "Starting AdventureDaemon..."
         adventureDaemon = AdventureDaemon(enchiridion)
         adventureDaemon.run()
         sys.exit(0)
+
     # stop daemon watcher
     elif sys.argv[-1] == '-s':
         print "shutting down the AdventureDaemon..."
         adventureDaemon = AdventureDaemon(enchiridion)
         adventureDaemon.stop()
         sys.exit(0)
+        
     else:
         enchiridion.listEpisodes()
         while True:

@@ -7,6 +7,8 @@ The script emulates the behaviour of browsing watchcartoononline.com and look fo
 Furthermore it frees you from embedded flash players! (yey!)
 Until now it works for the most recent episodes, other episodes throw a 404 error - you're welcome to fix this!
 
+The AdventureDeamon has been added! This magical creature living within the guts of linux waits, once summoned, for new adventures of Finn and Jake. Has it found, what it is looking for it will immediately ask you to sit down and watch the newest episode with you.
+
 
 run the script
 --------------
