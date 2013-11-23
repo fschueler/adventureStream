@@ -1,7 +1,7 @@
 adventureStream
 ===============
 
-A python script to stream adventure time episodes to vlc media player
+A python script to stream adventure time episodes to vlc media player under ubuntu (not tested for any other system)
 
 The script emulates the behaviour of browsing watchcartoononline.com and look for adventure time episodes. Everyone of us knows this from daily life so this little script should help.
 Furthermore it frees you from embedded flash players! (yey!)
