@@ -22,3 +22,5 @@ then run the script with
 options include (until now):
 
     -l:  streams the latest episode
+    -w:  starts AdventureDaemon that watches for new episodes
+    -s:  shuts down AdventureDaemon
