@@ -32,7 +32,23 @@ class Enchiridion:
     def __countEpisodes__(self):
         self.nEpisodes = len(self.links)
 
-
+    def printHeader(self):
+        string = '''
+        
+                       _                 _                  
+              __ _  __| |_   _____ _ __ | |_ _   _ _ __ ___ 
+             / _` |/ _` \ \ / / _ \ '_ \| __| | | | '__/ _ \ 
+            | (_| | (_| |\ V /  __/ | | | |_| |_| | | |  __/
+             \__,_|\__,_| \_/ \___|_| |_|\__|\__,_|_|  \___|
+             __ _                            
+            / _\ |_ _ __ ___  __ _ _ __ ___  
+            \ \| __| '__/ _ \/ _` | '_ ` _ \ 
+            _\ \ |_| | |  __/ (_| | | | | | |
+            \__/\__|_|  \___|\__,_|_| |_| |_|
+        
+        '''
+        
+        print string
     def correct(self, i):
         if i > len(self.links):
             return False
@@ -144,7 +160,6 @@ class AdventureDaemon(Daemon):
         n = int(tmpFile.read())
         tmpFile.close()
         return n
-        
 
 
     """
@@ -183,6 +198,7 @@ if __name__ == "__main__":
 
     # starting up the class saving the links & playing the episodes
     enchiridion = Enchiridion(base_url)
+    enchiridion.printHeader()
 
     # play latest episode
     if sys.argv[-1] == '-l':
