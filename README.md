@@ -18,7 +18,7 @@ you will need the python package mechanize
     
 then run the script with
 
-    python grabLinks.py [options]
+    python LandOfOoo.py [options]
 
 
 options include (until now):
