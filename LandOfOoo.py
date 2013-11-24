@@ -106,11 +106,9 @@ class Enchiridion:
 
 
         print 'streaming video from %s' %videolink
-        #videolink is in html --> filter for file=http%3A%2F%2Fl2.watchanimesub.net%2F180bdfd310df8a4129ec22836bfd9822%2F52901ac6%2Fputlocker%2F038C9B165CD09982.flv
-
-        #videolink = 'http://l2.watchanimesub.net/c62a74bfe7204b33b02a87e72c63cbea/528fdd92/putlocker/038C9B165CD09982.flv'
+        return videolink
             
-        os.system('vlc -vvv %s' %videolink)
+        
 
 """
 daemon thread running in the background that checks every checkIntervalMin if there's a new
@@ -188,8 +186,53 @@ if __name__ == "__main__":
 
     # play latest episode
     if sys.argv[-1] == '-l':
-        enchiridion.playEpisode(1)
-
+        videolink = enchiridion.playEpisode(1)
+        os.system('vlc -vvv %s' %videolink)
+        
+    #play all episodes in a loop randomly
+    elif sys.argv[-1] == '-a':
+        playlist = []
+        until = len(enchiridion.links)
+        for i in range(1, until):
+            try:
+                videolink = enchiridion.playEpisode(i)
+                playlist.append(videolink)
+            except:
+                pass
+            
+        s = ' '.join(playlist)
+        print playlist
+        os.system('vlc -vvv --random %s' %s)
+        
+    # loop x episodes randomly 
+    elif len(sys.argv) > 2 :
+        if (sys.argv[-2] == '-a'):
+            playlist = []
+            i = 0
+            try:
+                lim = int(sys.argv[-1])
+            except:
+                print 'Please enter a valid number!'
+                sys.exit(0)
+            if lim > len(enchiridion.links):
+                print 'There are no %d episodes, please enter a number below %d' %(lim, len(enchiridion.links))
+                sys.exit(0)
+            else:
+                until = lim
+            while len(playlist) < until and i < len(enchiridion.links):
+                try:
+                    videolink = enchiridion.playEpisode(i)
+                    playlist.append(videolink)
+                except:
+                    pass
+                i += 1
+            s = ' '.join(playlist)
+            print playlist
+            os.system('vlc -vvv --random %s' %s)  
+        else:
+            print 'Unvalid flag! Valid flags are: -a [limit] | -l | -w | -ss'    
+    
+        
     # start daemon watcher
     elif sys.argv[-1] == '-w':
         print "Starting AdventureDaemon..."
@@ -214,7 +257,8 @@ if __name__ == "__main__":
             elif episode == 'list':
                 enchiridion.listEpisodes()
             elif enchiridion.correct(episode):
-                enchiridion.playEpisode(episode)
+                s = enchiridion.playEpisode(episode)
+                os.system('vlc -vvv %s' %s) 
             else:
                 "sorry bro, not a valid episode"
 
