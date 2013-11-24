@@ -23,7 +23,8 @@ then run the script with
 
 options include (until now):
 
-    -l         streams the latest episode
-    -a [x]     streams x episodes randomly in a loop, if x is left or bigger than the number of episodes, all are played.
-    -w         starts AdventureDaemon that watches for new episodes
-    -s         shuts down AdventureDaemon
+    -l          streams the latest episode
+    -a [x]      streams x episodes randomly in a loop, 
+                if x is left or bigger than the number of episodes, all are played.
+    -w          starts AdventureDaemon that watches for new episodes
+    -s          shuts down AdventureDaemon
